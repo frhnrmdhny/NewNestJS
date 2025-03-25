@@ -1,12 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { BookModule } from './book/book.module';
-import { MahasiswaModule } from './mahasiswa/mahasiswa.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { KelasModule } from './kelas/kelas.module';
+import { ProdiModule } from './prodi/prodi.module';
+import { Kelas } from './kelas/kelas.entity';
+import { Prodi } from './prodi/prodi.entity';
 
 @Module({
-  imports: [BookModule, MahasiswaModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'university.db',
+      entities: [Kelas, Prodi],
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([Kelas, Prodi]),
+    KelasModule,
+    ProdiModule,
+  ],
 })
 export class AppModule {}
